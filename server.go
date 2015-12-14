@@ -7,7 +7,11 @@ import (
 	"net"
 	"net/http"
 	"strings"
+
+	portManager "github.com/charlesworth/tcpServer/portManager"
 )
+
+var port = 8081
 
 func main() {
 	fmt.Println("Launching discovery server...")
@@ -45,9 +49,10 @@ func tcpConnect() {
 	}
 }
 
-var port = 8081
-
 func discoveryServer() {
+	serv := portManager.New(8100, 8110)
+	i, _ := serv.TakePort()
+	fmt.Println(i)
 	http.HandleFunc("/discover", discoveryHandler)
 	http.ListenAndServe(":8080", nil)
 }
